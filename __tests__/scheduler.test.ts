@@ -89,4 +89,55 @@ describe('Scheduler - Execution', () => {
         expect(spy).toHaveBeenCalledTimes(2);
     });
 
+    it('should respect the hour field', () => {
+        const scheduler = new Scheduler();
+        const spy = jest.fn();
+
+        scheduler.addTask('TeaTime', '0 14 * * *', spy);
+
+        scheduler.tick(new Date('2026-01-01T13:00:00'));
+        expect(spy).not.toHaveBeenCalled();
+
+        scheduler.tick(new Date('2026-01-01T14:00:00'));
+        expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should respect the day of month', () => {
+        const scheduler = new Scheduler();
+        const spy = jest.fn();
+
+        scheduler.addTask('PayDay', '0 0 15 * *', spy);
+
+        scheduler.tick(new Date('2026-01-14T00:00:00'));
+        expect(spy).not.toHaveBeenCalled();
+
+        scheduler.tick(new Date('2026-01-15T00:00:00'));
+        expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should respect the month', () => {
+        const scheduler = new Scheduler();
+        const spy = jest.fn();
+    
+        scheduler.addTask('Summer', '0 0 1 6 *', spy);
+    
+        scheduler.tick(new Date('2026-05-01T00:00:00'));
+        expect(spy).not.toHaveBeenCalled();
+    
+        scheduler.tick(new Date('2026-06-01T00:00:00'));
+        expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should respect the day of week', () => {
+        const scheduler = new Scheduler();
+        const spy = jest.fn();
+
+        scheduler.addTask('MondayMeeting', '0 9 * * 1', spy);
+
+        scheduler.tick(new Date('2026-01-01T09:00:00')); 
+        expect(spy).not.toHaveBeenCalled();
+
+        scheduler.tick(new Date('2026-01-02T09:00:00'));
+        expect(spy).toHaveBeenCalledTimes(1);
+    });
 });
