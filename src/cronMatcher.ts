@@ -4,6 +4,10 @@ export class CronMatcher {
         const [min, hour, dom, mon, dow] = parts;
 
         if (!this.checkPart(min, date.getMinutes())) return false;
+        if (!this.checkPart(hour, date.getHours())) return false;
+        if (!this.checkPart(dom, date.getDate())) return false;
+        if (!this.checkPart(mon, date.getMonth() + 1)) return false;
+        if (!this.checkPart(dow, date.getDay())) return false;
         
         return true;
     }

@@ -137,7 +137,7 @@ describe('Scheduler - Execution', () => {
         scheduler.tick(new Date('2026-01-01T09:00:00')); 
         expect(spy).not.toHaveBeenCalled();
 
-        scheduler.tick(new Date('2026-01-02T09:00:00'));
+        scheduler.tick(new Date('2026-01-05T09:00:00'));
         expect(spy).toHaveBeenCalledTimes(1);
     });
 });
