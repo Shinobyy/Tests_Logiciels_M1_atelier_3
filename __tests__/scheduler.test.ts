@@ -140,4 +140,27 @@ describe('Scheduler - Execution', () => {
         scheduler.tick(new Date('2026-01-05T09:00:00'));
         expect(spy).toHaveBeenCalledTimes(1);
     });
+
+    it('should handle ranges (hyphen separator)', () => {
+        const scheduler = new Scheduler();
+        const spy = jest.fn();
+
+        scheduler.addTask('RangeTask', '1-3 * * * *', spy);
+
+        scheduler.tick(new Date('2026-01-01T10:00:00'));
+        expect(spy).not.toHaveBeenCalled();
+
+        scheduler.tick(new Date('2026-01-01T10:01:00'));
+        expect(spy).toHaveBeenCalledTimes(1);
+
+        scheduler.tick(new Date('2026-01-01T10:02:00'));
+        expect(spy).toHaveBeenCalledTimes(2);
+
+        scheduler.tick(new Date('2026-01-01T10:03:00'));
+        expect(spy).toHaveBeenCalledTimes(3);
+
+        scheduler.tick(new Date('2026-01-01T10:04:00'));
+        expect(spy).toHaveBeenCalledTimes(3);
+    });
+
 });
