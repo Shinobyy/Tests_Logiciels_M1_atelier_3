@@ -62,4 +62,18 @@ describe('Scheduler - Execution', () => {
         scheduler.tick(new Date('2023-01-01T10:30:00'));
         expect(spy).toHaveBeenCalledTimes(1);
     });
+
+    it('should handle lists of values (comma separator)', () => {
+        const scheduler = new Scheduler();
+        const spy = jest.fn();
+
+        scheduler.addTask('Quarter', '15,30 * * * *', spy);
+
+        scheduler.tick(new Date('2026-01-01T10:15:00'));
+        scheduler.tick(new Date('2026-01-01T10:20:00'));
+        scheduler.tick(new Date('2026-01-01T10:30:00'));
+
+        expect(spy).toHaveBeenCalledTimes(2);
+    });
+
 });
