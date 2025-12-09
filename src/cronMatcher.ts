@@ -21,9 +21,9 @@ export class CronMatcher {
 
     private static replaceNames(part: string, names: string[], offset: number): string {
         let res = part.toUpperCase();
-        names.forEach((name, index) => {
-            res = res.replace(new RegExp(name, 'g'), (index + offset).toString());
-        });
+        for (const name of names) {
+            res = res.replaceAll(new RegExp(name, 'g'), (names.indexOf(name) + offset).toString());
+        }
         return res;
     }
 
