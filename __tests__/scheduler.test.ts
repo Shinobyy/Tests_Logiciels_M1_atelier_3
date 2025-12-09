@@ -1,0 +1,38 @@
+import { Scheduler } from '../src/scheduler';
+import { describe, it, expect, jest } from '@jest/globals';
+
+describe('Scheduler - CRUD', () => {
+    it('should add a task and retrieve it', () => {
+        const scheduler = new Scheduler();
+        scheduler.addTask('Backup', '* * * * *', () => {});
+        expect(scheduler.getTasks()).toContain('Backup');
+    });
+
+    it('should overwrite a task if name already exists (Update)', () => {
+        const scheduler = new Scheduler();
+        const cb1 = jest.fn();
+        const cb2 = jest.fn();
+
+        scheduler.addTask('Job', '* * * * *', cb1);
+        scheduler.addTask('Job', '0 0 * * *', cb2);
+
+        const tasks = scheduler.getTasks();
+        expect(tasks).toHaveLength(1);
+        expect(tasks[0]).toBe('Job');
+    });
+
+    it('should remove a task and handle removal of non-existent task gracefully', () => {
+        const scheduler = new Scheduler();
+        scheduler.addTask('Job', '* * * * *', () => {});
+        
+        scheduler.removeTask('Job');
+        expect(scheduler.getTasks()).toHaveLength(0);
+
+        expect(() => scheduler.removeTask('Ghost')).not.toThrow();
+    });
+
+    it('should throw error if task name is empty', () => {
+        const scheduler = new Scheduler();
+        expect(() => scheduler.addTask('', '* *', () => {})).toThrow('Invalid name');
+    });
+});
