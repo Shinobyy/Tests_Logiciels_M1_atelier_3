@@ -76,4 +76,17 @@ describe('Scheduler - Execution', () => {
         expect(spy).toHaveBeenCalledTimes(2);
     });
 
+    it('should handle steps (intervals with /)', () => {
+        const scheduler = new Scheduler();
+        const spy = jest.fn();
+
+        scheduler.addTask('Every5Min', '*/5 * * * *', spy);
+
+        scheduler.tick(new Date('2026-01-01T10:05:00'));
+        scheduler.tick(new Date('2026-01-01T10:06:00'));
+        scheduler.tick(new Date('2026-01-01T10:10:00'));
+
+        expect(spy).toHaveBeenCalledTimes(2);
+    });
+
 });
