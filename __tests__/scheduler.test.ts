@@ -163,4 +163,16 @@ describe('Scheduler - Execution', () => {
         expect(spy).toHaveBeenCalledTimes(3);
     });
 
+    it('should handle textual names for months and days', () => {
+        const scheduler = new Scheduler();
+        const spy = jest.fn();
+
+        scheduler.addTask('TextualTask', '0 0 1 JAN MON', spy);
+
+        scheduler.tick(new Date('2024-01-01T00:00:00'));
+        expect(spy).toHaveBeenCalledTimes(1);
+
+        scheduler.tick(new Date('2024-02-05T00:00:00'));
+        expect(spy).not.toHaveBeenCalled();
+    });
 });
