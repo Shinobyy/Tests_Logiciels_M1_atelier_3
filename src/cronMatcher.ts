@@ -11,11 +11,17 @@ export class CronMatcher {
     private static checkPart(cronPart: string, value: number): boolean {
         if (cronPart === '*') return true;
         
-        if (cronPart.includes(',')) {
-            const allowedValues = cronPart.split(',').map(v => Number.parseInt(v));
-            return allowedValues.includes(value);
+        if (cronPart.includes('/')) {
+            let parts = cronPart.split('/');
+            let step = parseInt(parts[1]);
+            return (value % step) === 0;
         }
-        
-        return Number.parseInt(cronPart) === value;
+
+        if (cronPart.includes(',')) {
+            const parts = cronPart.split(',');
+            return parts.some(part => parseInt(part) === value);
+        }
+
+        return parseInt(cronPart) === value;
     }
 }
