@@ -1,3 +1,5 @@
+import { CronMatcher } from './cronMatcher.js';
+
 export type TaskCallback = () => void;
 
 interface Task {
@@ -37,19 +39,6 @@ export class Scheduler implements IScheduler {
     }
 
     private isTimeMatching(cron: string, date: Date): boolean {
-        if (cron === '* * * * *') return true;
-
-        const parts = cron.split(' ');
-        const cronMin = parts[0];
-
-        const currentMin = date.getMinutes();
-
-        if (cronMin !== '*') {
-            if (parseInt(cronMin) !== currentMin) {
-                return false;
-            }
-        }
-
-        return true;
+        return CronMatcher.match(cron, date);
     }
 }
