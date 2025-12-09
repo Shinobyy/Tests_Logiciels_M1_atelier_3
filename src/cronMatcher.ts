@@ -10,6 +10,12 @@ export class CronMatcher {
 
     private static checkPart(cronPart: string, value: number): boolean {
         if (cronPart === '*') return true;
+        
+        if (cronPart.includes(',')) {
+            const allowedValues = cronPart.split(',').map(v => parseInt(v));
+            return allowedValues.includes(value);
+        }
+
         return parseInt(cronPart) === value;
     }
 }
