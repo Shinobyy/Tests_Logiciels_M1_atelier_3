@@ -26,6 +26,13 @@ export class CronMatcher {
             return parts.some(part => Number.parseInt(part) === value);
         }
 
+        if (cronPart.includes('-')) {
+            const parts = cronPart.split('-');
+            const start = Number.parseInt(parts[0]);
+            const end = Number.parseInt(parts[1]);
+            return value >= start && value <= end;
+        }
+
         return Number.parseInt(cronPart) === value;
     }
 }
