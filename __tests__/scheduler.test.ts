@@ -36,3 +36,17 @@ describe('Scheduler - CRUD', () => {
         expect(() => scheduler.addTask('', '* *', () => {})).toThrow('Invalid name');
     });
 });
+
+describe('Scheduler - Execution', () => {
+    it('should execute a task matching the time (* * * * *)', () => {
+        const scheduler = new Scheduler();
+        const spyCallback = jest.fn();
+
+        scheduler.addTask('EveryMinute', '* * * * *', spyCallback);
+
+        const fakeNow = new Date('2023-01-01T12:00:00');
+        scheduler.tick(fakeNow);
+
+        expect(spyCallback).toHaveBeenCalledTimes(1);
+    });
+});

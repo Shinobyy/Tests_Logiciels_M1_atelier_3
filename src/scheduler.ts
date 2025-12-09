@@ -9,6 +9,7 @@ interface IScheduler {
     addTask(name: string, cron: string, callback: TaskCallback): void;
     removeTask(name: string): void;
     getTasks(): string[];
+    tick(currentTime: Date): void;
 }
 
 export class Scheduler implements IScheduler {
@@ -26,4 +27,6 @@ export class Scheduler implements IScheduler {
     getTasks(): string[] {
         return Array.from(this.tasks.keys());
     }
+
+    tick(currentTime: Date): void {}
 }
