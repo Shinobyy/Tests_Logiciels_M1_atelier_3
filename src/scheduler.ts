@@ -38,6 +38,18 @@ export class Scheduler implements IScheduler {
 
     private isTimeMatching(cron: string, date: Date): boolean {
         if (cron === '* * * * *') return true;
-        return false;
+
+        const parts = cron.split(' ');
+        const cronMin = parts[0];
+
+        const currentMin = date.getMinutes();
+
+        if (cronMin !== '*') {
+            if (parseInt(cronMin) !== currentMin) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
