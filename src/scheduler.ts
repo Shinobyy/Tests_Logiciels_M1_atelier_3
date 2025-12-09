@@ -28,5 +28,9 @@ export class Scheduler implements IScheduler {
         return Array.from(this.tasks.keys());
     }
 
-    tick(currentTime: Date): void {}
+    tick(currentTime: Date): void {
+        this.tasks.forEach((task) => {
+            task.callback();
+        });
+    }
 }
