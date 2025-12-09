@@ -13,15 +13,15 @@ export class CronMatcher {
         
         if (cronPart.includes('/')) {
             let parts = cronPart.split('/');
-            let step = parseInt(parts[1]);
+            let step = Number.parseInt(parts[1]);
             return (value % step) === 0;
         }
 
         if (cronPart.includes(',')) {
             const parts = cronPart.split(',');
-            return parts.some(part => parseInt(part) === value);
+            return parts.some(part => Number.parseInt(part) === value);
         }
 
-        return parseInt(cronPart) === value;
+        return Number.parseInt(cronPart) === value;
     }
 }
