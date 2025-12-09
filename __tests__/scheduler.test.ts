@@ -49,4 +49,17 @@ describe('Scheduler - Execution', () => {
 
         expect(spyCallback).toHaveBeenCalledTimes(1);
     });
+
+    it('should only execute if the minute matches exactly', () => {
+        const scheduler = new Scheduler();
+        const spy = jest.fn();
+
+        scheduler.addTask('HalfHour', '30 * * * *', spy);
+
+        scheduler.tick(new Date('2023-01-01T10:15:00'));
+        expect(spy).not.toHaveBeenCalled();
+
+        scheduler.tick(new Date('2023-01-01T10:30:00'));
+        expect(spy).toHaveBeenCalledTimes(1);
+    });
 });
