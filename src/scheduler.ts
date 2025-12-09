@@ -1,25 +1,29 @@
-export class Scheduler {
-    list: any = [];
+export type TaskCallback = () => void;
 
-    addTask(name: string, cron: string, cb: any) {
+interface Task {
+    cron: string;
+    callback: TaskCallback;
+}
+
+interface IScheduler {
+    addTask(name: string, cron: string, callback: TaskCallback): void;
+    removeTask(name: string): void;
+    getTasks(): string[];
+}
+
+export class Scheduler implements IScheduler {
+    private readonly tasks: Map<string, Task> = new Map();
+
+    addTask(name: string, cron: string, callback: TaskCallback): void {
         if (!name) throw new Error('Invalid name');
-        
-        let foundIndex = -1;
-        for(let i=0; i<this.list.length; i++) {
-            if (this.list[i].id === name) foundIndex = i;
-        }
-        if (foundIndex !== -1) {
-            this.list.splice(foundIndex, 1);
-        }
-
-        this.list.push({ id: name, c: cron, f: cb });
+        this.tasks.set(name, { cron, callback });
     }
 
-    removeTask(name: string) {
-        this.list = this.list.filter((item: any) => item.id !== name);
+    removeTask(name: string): void {
+        this.tasks.delete(name);
     }
 
-    getTasks() {
-        return this.list.map((i: any) => i.id);
+    getTasks(): string[] {
+        return Array.from(this.tasks.keys());
     }
 }
