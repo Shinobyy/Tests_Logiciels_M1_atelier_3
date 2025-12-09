@@ -29,8 +29,15 @@ export class Scheduler implements IScheduler {
     }
 
     tick(currentTime: Date): void {
-        this.tasks.forEach((task) => {
-            task.callback();
-        });
+        for (const task of this.tasks.values()) {
+            if (this.isTimeMatching(task.cron, currentTime)) {
+                task.callback();
+            }
+        }
+    }
+
+    private isTimeMatching(cron: string, date: Date): boolean {
+        if (cron === '* * * * *') return true;
+        return false;
     }
 }
